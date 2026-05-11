@@ -102,9 +102,20 @@ class Student {
 
     }
 
-    edit() {
-
+edit(studentId, nouvellesDonnees) {
+    const studentList = JSON.parse(localStorage.getItem('studentList'))
+    
+    const index = studentList.findIndex((item) => item.id === studentId)
+    
+    if (index !== -1) {
+        studentList[index] = {
+        ...studentList[index],
+        ...nouvellesDonnees
+        }
+        localStorage.setItem('studentList', JSON.stringify(studentList))
+        this.display()
     }
+}
 
     delete(studentId) {
         const studentList = JSON.parse(localStorage.getItem('studentList'))
@@ -120,17 +131,6 @@ class Student {
         if (studentList) {
             if (studentList.length > 0) {
                 studentList.forEach((student) => {
-                    /*tbodyTag.innerHTML += `<tr>
-                        <td>${student.id}</td>
-                        <td>${student.lastname}</td>
-                        <td>${student.firstname}</td>
-                        <td>${student.address}</td>
-                        <td>${student.contact}</td>
-                        <td>
-                            <button>Edit</button>
-                            <button onclick="${this.delete(student.id)}">Delete</button>
-                        </td>
-                    </tr>`*/
                     const trTag = document.createElement('tr')
                     trTag.innerHTML = `
                         <td>${student.id}</td>
@@ -157,33 +157,42 @@ class Student {
                     <td colspan="6" style='text-align:center;'>Aucun étudiant enregistré</td>
                 </tr>`
             }
-
+            const editButtonTag = document.querySelectorAll('button:nth-child(1)')
+            if(editButtonTag){
+                editButtonTag.forEach((editButton) => {
+                    editButton.addEventListener('click', () => {
+                        const studentId = editButton.closest('tr').querySelector('td:nth-child(1)').textContent
+                        const lastname = editButton.closest('tr').querySelector('td:nth-child(2)').textContent
+                        const firstname = editButton.closest('tr').querySelector('td:nth-child(3)').textContent
+                        const address = editButton.closest('tr').querySelector('td:nth-child(4)').textContent
+                        const contact = editButton.closest('tr').querySelector('td:nth-child(5)').textContent
+                        const form_tag = document.getElementById('studentform')
+                        if (form_tag) {
+                            form_tag.querySelector('input[name="last_name"]').value = lastname
+                            form_tag.querySelector('input[name="first_name"]').value = firstname
+                            form_tag.querySelector('input[name="adress"]').value = address
+                            form_tag.querySelector('input[name="contact"]').value = contact
+                            form_tag.querySelector('button[type="submit"]').textContent = "Save"
+                            form_tag.querySelector('button[type="submit"]').addEventListener('click', () => {
+                                const nouvellesDonnees = {
+                                    lastname: form_tag.querySelector('input[name="last_name"]').value,
+                                    firstname: form_tag.querySelector('input[name="first_name"]').value,
+                                    address: form_tag.querySelector('input[name="adress"]').value,
+                                    contact: form_tag.querySelector('input[name="contact"]').value
+                                }
+                                this.edit(studentId, nouvellesDonnees)
+                            })
+                        }
+                    })
+                })
+            }
         }
     }
 }
 const student = new Student()
 student.registered()
 student.display()
-
-/* const STUDENT = {
-    firstname : "",
-    lastname : "toto",
-    contact : "",
-    adress : "",
-
-    registered : ()=>{
-
-    },
-
-    edit : ()=>{
-
-    },
-
-    delete : ()=>{
-
-    }
-}
-console.log(STUDENT.lastname); */
+student.edit()
 
 
 
