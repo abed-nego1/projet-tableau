@@ -143,7 +143,7 @@ edit(studentId, nouvellesDonnees) {
                             <button>Delete</button>
                         </td>
                     `
-                    const deleteButtonTag = trTag.querySelector("button:nth-child(2)")
+                    const deleteButtonTag = trTag.querySelectorAll("button")[1]
                     if(deleteButtonTag){
                         deleteButtonTag.addEventListener('click', () => {
                             this.delete(student.id)
@@ -157,7 +157,7 @@ edit(studentId, nouvellesDonnees) {
                     <td colspan="6" style='text-align:center;'>Aucun étudiant enregistré</td>
                 </tr>`
             }
-            const editButtonTag = document.querySelectorAll('button:nth-child(1)')
+            cconst editButtonTag = document.querySelectorAll("button:first-of-type")
             if(editButtonTag){
                 editButtonTag.forEach((editButton) => {
                     editButton.addEventListener('click', () => {
@@ -192,7 +192,6 @@ edit(studentId, nouvellesDonnees) {
 const student = new Student()
 student.registered()
 student.display()
-student.edit()
 
 
 
